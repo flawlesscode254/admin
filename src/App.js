@@ -20,6 +20,9 @@ function App() {
   const [phone, setPhone] = useState([])
   const [plate, setPlate] = useState([])
   const [email, setEmail] = useState([])
+  const [time, setTime] = useState([])
+  const [end, setEnd] = useState([])
+  const [total, setTotal] = useState()
 
   const handleChange = () => {
     db.collection("orders").where("code", "==", Number(view)).get().then((snapshot) => {
@@ -28,6 +31,23 @@ function App() {
           setPhone(doc.data().phone)
           setPlate(doc.data().plate)
           setEmail(doc.data().email)
+          const timeStampDate = doc.data().time;
+          const dateInMillis  = (timeStampDate * 1000)
+          var date = new Date(dateInMillis).toLocaleTimeString()
+          setTime("Time of start: " + date)
+
+          let d = new Date().getHours() * 60;
+          let e = new Date().getMinutes();
+          let f = d + e
+
+          let g = timeStampDate * 1000
+          let h = new Date(g).getMinutes()
+          let i = new Date(g).getHours() * 60
+          let j = h + i
+          let k = (f - j)
+          setEnd("Total minutes taken: " + k)
+          let l = k * 0.8
+          setTotal("Total amount to be paid: Ksh" + l)
       })
   })
   setView('')
@@ -46,6 +66,9 @@ function App() {
       <p>{phone}</p>
       <p>{email}</p>
       <p>{plate}</p>
+      <p>{time}</p>
+      <p>{end}</p>
+      <p>{total}</p>
     </div>
   );
 }
